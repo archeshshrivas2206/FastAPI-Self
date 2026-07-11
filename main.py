@@ -4,7 +4,7 @@ app= FastAPI()
 
 @app.get("/")
 def read_root():
-    return {"message": "hello"}
+    return {"message": "hello "}
 # these are path params:
 
 # this is more specific route function so it is placed above the dynamic one otherwise the dynamic function would have engulfed the 'me' and the sactual designated function for this url wouldnt have functioned. 
