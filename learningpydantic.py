@@ -1,12 +1,15 @@
+from fastapi import FastAPI
 from pydantic import BaseModel
 from typing import Optional
+
+app = FastAPI()
 
 class Item(BaseModel):
     name: str
     price: float
     description: str | None=None # this is a way to declare an optional field {latest}
-    # desc: Optional[str]=None  this is the older way of declaring an optional field
-    in_stock= bool = True
+    desc: Optional[str]=None  # this is the older way of declaring an optional field
+    in_stock: bool = True
 
 from pydantic import Field
 class Item2(BaseModel):
@@ -16,4 +19,15 @@ class Item2(BaseModel):
 
 from pydantic import EmailStr , HttpUrl
 
+class Users(BaseModel):
+    name: str
+    email: EmailStr # validates actual email format
+    website: HttpUrl #validates it's a real url
 
+
+# validating with regex/pattern
+
+class Users2(BaseModel):
+    username: str= Field(pattern=r"^[a-zA-Z0-9_]+$") # only letters, numbers, underscores
+
+    
