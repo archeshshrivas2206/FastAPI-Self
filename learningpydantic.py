@@ -28,6 +28,44 @@ class Users(BaseModel):
 # validating with regex/pattern
 
 class Users2(BaseModel):
-    username: str= Field(pattern=r"^[a-zA-Z0-9_]+$") # only letters, numbers, underscores
+    username: str= Field(pattern=r"^[a-zA-Z0-9_]+$") # only letters, numbers, underscores are alloed , things enclosed in [] are the valid characters , + denote that there should be atleast one character from the [] , ^ and $ states the start and end of the string and r means raw string in python. 
 
+
+# Nested Models 
+
+class Address(BaseModel):
+    city: str
+    pincode: int
+
+class User3(BaseModel):
+    name: str
+    email: EmailStr
+    address: Address # nested model 
+
+
+
+# List of models 
+class Order(BaseModel):
+    item_name: str
+    quantity: int
+
+class User4(BaseModel):
+    name: str
+    orders: list[Order]=[] # a list of Order objects, default to empty list.
+
+
+# Custom Validators 
+
+from pydantic import field_validator
+
+class User5(BaseModel):
+    name: str
+    age: int
+
+    @field_validator("age")
+    @classmethod
+    def check_age(cls,value):
+        if value < 18:
+            raise ValueError("You are underage! ")
+        return value
     
