@@ -6,3 +6,5 @@ DATABASE_URL="mysql+pymysql://root:Archesh%400110@localhost:3306/app_db"
 engine=create_engine(DATABASE_URL)
 SessionLocal=sessionmaker(autocommit=False,autoflush=False,bind=engine)
 Base=declarative_base()
+
+
