@@ -29,7 +29,7 @@ class ProductCreate(BaseModel):
     price: float
     description: str | None = None
     manufacturer_id:int
-    category_ids=list[int]
+    category_ids:list[int]
 
 class ProductOut(BaseModel):
     id:int

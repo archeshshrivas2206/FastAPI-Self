@@ -10,13 +10,17 @@ app=FastAPI()
 
 Base.metadata.create_all(bind=engine)
 
+@app.get("/")
+def homepage():
+    return {"message":"welcome to homepage"}
 
-@app.post("/categories",response_model=schemas.CategoruOut,status_code=status.HTTP_201_CREATED)
+@app.post("/categories",response_model=schemas.CategoryOut,status_code=status.HTTP_201_CREATED)
 def create_category(category:schemas.CategoryCreate,db:Session=Depends(get_db)):
     new_category=model.Category(name=category.name)
     db.add(new_category)
     db.commit()
     db.refresh(new_category)
+    return new_category
 
 
 @app.post("/products",response_model=schemas.ProductOut, status_code=status.HTTP_201_CREATED)
@@ -59,7 +63,10 @@ def get_products(db:Session=Depends(get_db)):
 
 @app.get("/products/{product_id}", response_model=schemas.ProductOut)
 def get_product(product_id:int,db:Session=Depends(get_db)):
-    return db.query(model.Product).filter(model.Product.id==product_id).first()
+    product = db.query(model.Product).filter(model.Product.id == product_id).first()
+    if not product:
+        raise HTTPException(status_code=404, detail="Product not found")
+    return product
 
 
 @app.get("/manufacturers/{manufacturer_id}/products", response_model=list[schemas.ProductOut])
@@ -86,6 +93,7 @@ def update_product(product_id:int ,updated:schemas.ProductCreate,db:Session=Depe
     product.price=updated.price
     product.description=updated.description
     product.manufacturer_id=updated.manufacturer_id
+    product.category_id=updated.category_id
     db.commit()
     db.refresh(product)
     return product
