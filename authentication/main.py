@@ -1,5 +1,6 @@
 import schemas
 import model
+import auth
 from database import Base, engine , get_db
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
@@ -13,6 +14,21 @@ Base.metadata.create_all(bind=engine)
 @app.get("/")
 def homepage():
     return {"message":"welcome to homepage"}
+@app.post("/register", response_model=schemas.UserOut, status_code=status.HTTP_201_CREATED)
+def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
+    existing_user = db.query(model.User).filter(model.User.username == user.username).first()
+    if existing_user:
+        raise HTTPException(status_code=409, detail="Username already taken")
+
+    new_user = model.User(
+        username=user.username,
+        email=user.email,
+        hashed_password=auth.hash_password(user.password)   # hash immediately, never store raw
+    )
+    db.add(new_user)
+    db.commit()
+    db.refresh(new_user)
+    return new_user
 
 @app.post("/categories",response_model=schemas.CategoryOut,status_code=status.HTTP_201_CREATED)
 def create_category(category:schemas.CategoryCreate,db:Session=Depends(get_db)):
