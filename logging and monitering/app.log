@@ -1,0 +1,28 @@
+2026-09-08 15:25:12,178-main-INFO-GET/docs completed in 0.0009s
+2026-09-08 15:25:12,311-main-INFO-GET/openapi.json completed in 0.0684s
+2026-09-08 15:25:13,165-main-INFO-GET/docs completed in 0.0003s
+2026-09-08 15:25:13,221-main-INFO-GET/openapi.json completed in 0.0004s
+2026-09-08 15:25:13,731-main-INFO-GET/docs completed in 0.0003s
+2026-09-08 15:25:13,784-main-INFO-GET/openapi.json completed in 0.0004s
+2026-09-08 15:25:14,125-main-INFO-GET/docs completed in 0.0004s
+2026-09-08 15:25:14,212-main-INFO-GET/openapi.json completed in 0.0008s
+2026-09-08 15:25:14,451-main-INFO-GET/docs completed in 0.0007s
+2026-09-08 15:25:14,548-main-INFO-GET/openapi.json completed in 0.0004s
+2026-09-08 15:25:14,721-main-INFO-GET/docs completed in 0.0008s
+2026-09-08 15:25:14,803-main-INFO-GET/openapi.json completed in 0.0006s
+2026-09-08 15:25:15,021-main-INFO-GET/docs completed in 0.0005s
+2026-09-08 15:25:15,082-main-INFO-GET/openapi.json completed in 0.0008s
+2026-09-08 15:25:15,293-main-INFO-GET/docs completed in 0.0010s
+2026-09-08 15:25:15,354-main-INFO-GET/openapi.json completed in 0.0004s
+2026-09-08 15:25:32,432-main-INFO-GET/health completed in 0.0048s
+2026-09-08 15:25:57,651-main-INFO-GET/products/1 completed in 0.0363s
+2026-09-08 15:26:04,850-main-INFO-GET/products/1 completed in 0.0071s
+2026-09-08 15:26:11,352-main-ERROR-Unexpected error fetching product 4
+Traceback (most recent call last):
+  File "D:\coding\fullstack\fastapi by claude\logging and monitering\main.py", line 196, in get_product
+    raise HTTPException(status_code=404, detail="Product not found")
+fastapi.exceptions.HTTPException: 404: Product not found
+2026-09-08 15:26:11,365-main-INFO-GET/products/4 completed in 0.0157s
+2026-09-08 15:26:18,176-main-INFO-GET/products/3 completed in 0.0172s
+2026-09-08 15:27:35,977-main-INFO-New user registered :sampleuser
+2026-09-08 15:27:35,978-main-INFO-POST/register completed in 0.3518s
