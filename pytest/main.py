@@ -12,6 +12,10 @@ from fastapi import Request
 
 from fastapi.middleware.cors import CORSMiddleware
 
+from fastapi import BackgroundTasks
+
+import redis
+import json
 
 
 
@@ -28,6 +32,12 @@ app.add_middleware(
 Base.metadata.create_all(bind=engine)
 
 oauth2_scheme=OAuth2PasswordBearer(tokenUrl="login")
+
+redis_client=redis.Redis(host="localhost",port=6379,db=0,decode_responses=True)
+
+def send_welcome_email(email:str):
+    time.sleep(2)
+    print(f"welcome email sent to {email}")
 
 @app.middleware("http")
 async def log_requests(request:Request,call_next):
@@ -74,7 +84,7 @@ def login(form_data:OAuth2PasswordRequestForm=Depends(),db:Session=Depends(get_d
 
 
 @app.post("/register", response_model=schemas.UserOut, status_code=status.HTTP_201_CREATED)
-def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
+def register(user: schemas.UserCreate,background_tasks:BackgroundTasks, db: Session = Depends(get_db)):
     existing_user = db.query(model.User).filter(model.User.username == user.username).first()
     if existing_user:
         raise HTTPException(status_code=409, detail="Username already taken")
@@ -87,6 +97,9 @@ def register(user: schemas.UserCreate, db: Session = Depends(get_db)):
     db.add(new_user)
     db.commit()
     db.refresh(new_user)
+
+    background_tasks.add_task(send_welcome_email,new_user.email)
+        
     return new_user
 
 
@@ -117,6 +130,10 @@ def create_product(product:schemas.ProductCreate,db:Session=Depends(get_db)):
     db.add(new_product)
     db.commit()
     db.refresh(new_product)
+
+
+    redis_client.delete("all_products")
+    
     return new_product
 
 
@@ -140,7 +157,19 @@ def read_current_user(current_user:model.User=Depends(get_current_user)):
 
 @app.get("/products",response_model=list[schemas.ProductOut])
 def get_products(db:Session=Depends(get_db)):
-    return db.query(model.Product).all()
+
+    cache_key="all_products"
+    cached=redis_client.get(cache_key)
+
+    if cached:
+        return json.loads(cached)
+
+    products=db.query(model.Product).all()
+    result=[schemas.ProductOut.model_validate(p).model_dump(mode="json")for p in products]
+
+    redis_client.set(cache_key,json.dumps(result),ex=60)
+
+    return result
 
 
 @app.get("/products/{product_id}", response_model=schemas.ProductOut)
