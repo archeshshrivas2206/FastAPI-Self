@@ -1,0 +1,56 @@
+Part 1: Foundations of the Web
+
+Client-server model & how the internet actually works
+HTTP deep dive (methods, status codes, headers, request/response cycle)
+REST principles & API design basics
+JSON & data serialization
+
+Part 2: Core Backend Concepts
+
+What a "server" actually is (WSGI vs ASGI, sync vs async)
+Routing & request handling
+Databases 101 (relational concepts, SQL basics)
+ORMs — what problem they solve
+
+Part 3: FastAPI Fundamentals
+
+Project setup & first endpoint
+Path params, query params, request body
+Pydantic models & validation
+Response models, status codes, error handling
+Dependency Injection (FastAPI's core idea)
+
+Part 4: Databases with FastAPI
+
+SQLAlchemy basics
+Alembic migrations
+CRUD operations properly structured
+Relationships (one-to-many, many-to-many)
+
+Part 5: Auth & Security
+
+Sessions vs tokens
+Password hashing
+JWT & OAuth2
+Middleware & CORS
+
+Part 6: Advanced Concepts
+
+Async programming — actually understanding it, not just async def
+Background tasks & caching (Redis)
+Testing with pytest
+Logging & monitoring
+
+Part 7: Architecture & Deployment
+
+Proper project structure (layered architecture: routers/services/repositories)
+Docker basics
+Deployment (Uvicorn/Gunicorn, cloud)
+API docs & versioning
+
+Part 8: Production-grade Concerns
+
+Rate limiting
+Basic microservices concepts
+Message queues
+Observability
